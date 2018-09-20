@@ -3,14 +3,20 @@ import './App.css';
 import Person from './Person/Person';
 
 class App extends Component {
+  
   state = {
     persons: [
       { name: 'Max', age: 28 },
       { name: 'Manu', age: 29 },
       { name: 'Stephanie', age: 26 }
     ],
-    otherState: 'some other value'
+    otherState: 'some other value',
+    showPerson:true,
+    
+    
   }
+  
+
 
   switchNameHandler = (newName) => {
     // console.log('Was clicked!');
@@ -33,6 +39,13 @@ class App extends Component {
       ]
     } )
   }
+  togglePerson =()=>{
+    
+    this.setState({
+      
+      showPerson:!this.state.showPerson
+    })
+  }
 
   render () {
     const style ={
@@ -42,23 +55,27 @@ class App extends Component {
       padding:'8px',
       cursor:'pointer'
     }
+    let persons = null;
+    if (this.state.showPerson) {
+      persons = (
+        <div>
+          {this.state.persons.map(person=>{
+            return <Person name={person.name}age={person.age} />
+          })}
+        </div>
+      );
+    }
+    
     return (
       <div className="App">
         <h1>Hi, I'm a React App</h1>
         <p>This is really working!</p>
-        <button style={style} onClick={this.switchNameHandler.bind(this, 'Maximilian!!')}>Switch Name</button>
-        <Person 
-          name={this.state.persons[0].name} 
-          age={this.state.persons[0].age} />
-        <Person 
-          name={this.state.persons[1].name} 
-          age={this.state.persons[1].age}
-          click={this.switchNameHandler.bind(this, 'Max!')}
-          changed={this.nameChangedHandler} >My Hobbies: Racing</Person>
-        <Person 
-          name={this.state.persons[2].name} 
-          age={this.state.persons[2].age} />
+        <button style={style} onClick={this.togglePerson}>Switch Name</button>
+        <div style={{display:(this.state.showPerson?'block':'none')}}>
+        {persons}
       </div>
+      </div>
+
     );
     // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Does this work now?'));
   }
